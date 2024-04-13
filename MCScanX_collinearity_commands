@@ -1,5 +1,6 @@
 # Preparation of the input files for MCScanX run
 # gff3 files were modified to have the following format: chromosome_number gene_name starting_position stop_position (add number 5 in the loop for Propanagrolaimus)
+sed 's/g\([0-9]\{1,5\}\);/g\1.t1;/g' ES5.braker.chromosomes.gff3 > ES5.braker.chromosomes.gff3.t1_added.gff3
 for number in 1 2 3 4; do sed "s/scaffold_${number}/ES5_${number}/g" ES5.braker.chromosomes.gff3.t1_added.gff3 ; done | grep -v "scaffold" | grep "gene" | sed 's/\.t1/_ES5_t1/g' | sed 's/ID=//g' | sed 's/;//g' | cut -f 1,4,5,9 > ES5.braker.chromosomes.gff3.t1_added.mcscanx.gff3
 for name in ES5 JU765 LC92 Pdet PS1579.HapA PS1579.HapB PS1579.HapC psuperbus; do awk -F'\t' -v OFS='\t' '{print $1, $4, $2, $3}' ${name}.*.mcscanx.gff3 > ${name}.braker.chromosomes.gff3.t1_added.mcscanx_final.gff3 ; done
 
