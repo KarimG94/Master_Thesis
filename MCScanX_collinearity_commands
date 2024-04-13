@@ -1,0 +1,15 @@
+# Preparation of the input files for MCScanX run
+# gff3 files were modified to have the following format: chromosome_number gene_name starting_position stop_position (add number 5 in the loop for Propanagrolaimus)
+for number in 1 2 3 4; do sed "s/scaffold_${number}/ES5_${number}/g" ES5.braker.chromosomes.gff3.t1_added.gff3 ; done | grep -v "scaffold" | grep "gene" | sed 's/\.t1/_ES5_t1/g' | sed 's/ID=//g' | sed 's/;//g' | cut -f 1,4,5,9 > ES5.braker.chromosomes.gff3.t1_added.mcscanx.gff3
+for name in ES5 JU765 LC92 Pdet PS1579.HapA PS1579.HapB PS1579.HapC psuperbus; do awk -F'\t' -v OFS='\t' '{print $1, $4, $2, $3}' ${name}.*.mcscanx.gff3 > ${name}.braker.chromosomes.gff3.t1_added.mcscanx_final.gff3 ; done
+
+# modify proteome fasta headers as well to be fitting to gff3 names. Note that for PS1579.HapB, the chromosome 2 gene names are g123_ps1579_c_t1 and vice versa for HapC. This was done as the chromosomes were at first mixed up between haplotypes, error was found with mash dist.
+/home/kgueddac/Software/mash-Linux64-v2.3/mash dist -C HapA_chr2.fasta HapB_chr2.fasta HapC_chr2.fasta
+
+# use blast like this
+blastp -query PS1579.HapC.braker.unigene.corrected.fasta -db ES5.braker.chromosomes.fasta -evalue 1e-10 -outfmt 6 -num_threads 20 -out PS1579HapC_to_ES5.blast
+
+# cat all .blast file together to xyz.blast and all .gff3 files together to xyz.gff, put in one folder, then use MCScanX:
+/home/kgueddac/Software/MCScanX/MCScanX xyz/xyz -k 250 -e 1e-20
+
+# put xyz.collinearity file, gff file and color_file (colors from nigon element file) into Synvisio
