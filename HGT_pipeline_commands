@@ -1,0 +1,61 @@
+Used the HGT pipeline from Nowell et al. 2018.
+
+# first generate taxlist
+perl -lane 'if(/^>(\w+)\s.+TaxID\=(\d+)/){print "$1\t$2"}' <(zcat uniref90.fasta.gz) | gzip > uniref90.fasta.taxlist.gz
+.
+# diamond run and template for nested for loop to iterate over all haplotypes and chromosomes
+for letter in A B C ; do for number in 1 2 3 4 ; do diamond blastp --verbose --log --sensitive --index-chunks 1 -k 500 -e 1e-5 -p 32 -q new_proteins_fastas/PS1579_hap${letter}_chr${number}.braker.proteins.fasta -d uniref90/uniref90.fasta.dmnd -a PS1579_hap${letter}_chr${number}.braker.proteins.fasta ; done ; done
+
+# Taxify output
+for file in other_nematode_species/*.daa ; do cat <(zcat uniref90/uniref90.fasta.taxlist.gz) <(diamond view -a ${file}) | perl -lane '
+ if(@F==2){
+   $tax{$F[0]}=$F[1];
+ }else{
+   if(exists($tax{$F[1]})){
+     print join("\t",@F,$tax{$F[1]});
+   } else {
+     print join("\t",@F,"NA");
+   }
+ }
+' | gzip > ${file}.taxid.gz ; done
+
+# Use diamond_to_HGT_candidates.pl script (Option -k 6231 was used to exclude nematodes, taxid files have to be unzipped again for better results, TAXPATH variable to the taxdump folder has to be set!)
+for file in other_nematodes_exclude_nematodes_taxid_files/*.taxid ; do hgt-1.0/diamond_to_HGT_candidates.pl -i $file -v -p $TAXPATH -k 6231 ; done
+
+# make blast database
+makeblastdb -in uniref90.fasta -dbtype prot -parse_seqids -out uniref90.fasta.blastoutput
+
+# HGT_candidates_to_fasta.pl
+for letter in A B C ; do for number in 1 2 3 4 ; do hgt-1.0/HGT_candidates_to_fasta.pl --in new_exclude_nemaotdes_taxid_files/PS1579_hap${letter}_chr${number}.braker.proteins.fasta.daa.taxid -c new_exclude_nemaotdes_taxid_files/PS1579_hap${letter}_chr${number}.braker.proteins.fasta.daa.taxid.HGT_candidates.Metazoa.hU30.CHS90.txt -u uniref90/uniref90.fasta.blastoutput -f new_proteins_fastas/PS1579_hap${letter}_chr${number}.braker.proteins.fasta -p $TAXPATH -k 6231 -v -d new_no_nematodes_hgt_candidate_locations/PS1579_hap${letter}_chr${number}_HGT_candidates_to_fasta_outdir/; done; done
+
+# use mafft (repeat for each Haplotype)
+for folder in PS1579_hapA_chr* ; do cd $folder && for f in *.fasta ; do echo $f ; mafft --auto --quiet --thread 8 $f > ../mafft_alns/${folder}_${f}.mafft ; done && cd ../ ; done
+
+# from within mafft_alns directory, use script ./iqtree.sh
+#!/bin/bash
+
+mkdir processed_files
+
+COUNT=1
+
+for file in *mafft; do
+   echo "$COUNT: $file"
+   
+   #Run iqtree
+   iqtree-omp -s "$file" -st AA -nt 16 -quiet -bb 1000 -m TESTNEW -msub nuclear
+
+   mv "$file" processed_files/
+
+   ((COUNT++))
+done
+
+mkdir iqtree treefiles
+
+mv *treefile treefiles/
+mv *bionj *gz *contree *iqtree *log *mldist *model *nex iqtree/
+
+#get_locations_of_HGT_candidates.pl
+for letter in A B C ; do for number in 1 2 3 4 ; do hgt-1.0/get_location_of_HGT_candidates.pl --in new_exclude_nemaotdes_taxid_files/PS1579_hap${letter}_chr${number}.braker.proteins.fasta.daa.taxid.HGT_results.Metazoa.txt -gff new_gff3_files/Hap${letter}_chr${number}.t1added.braker.gff3 -n new_proteins_fastas/PS1579_hap${letter}_chr${number}.braker.proteins.fasta -b ; done ; done
+
+# analyse_trees.R command
+Rscript hgt-1.0/analyse_trees.R -p new_no_nematodes_hgt_candidate_locations/mafft_alns/treefiles/ -q t1 -v TRUE
