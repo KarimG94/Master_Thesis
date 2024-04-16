@@ -1,1 +1,5 @@
+# telomere idenficication toolkit from Brown et al. 2023 was used
 
+for file in *_A.fasta *_CDX.fasta ; do tidk explore --minimum 5 --maximum 12 $file ; done
+for file in *_A.fasta *_CDX.fasta *_ACDX.fasta ; do tidk search --string GCTTAGGCTTA --window 500 --dir . --output ${file}_search_chr1_GCTTAGGCTTA_w500 $file ; done 
+for file in *_windows.tsv ; do tidk plot --tsv $file --output ${file}_tidk-plot ; done
