@@ -1,0 +1,2 @@
+#fist add headers to the gff file as described in the documentation pdf (Guizard et al. 2016)
+DensityMap.pl -i PS1579.HapA.braker.t1_added.gff -o PS1579_HapA_DM_fused_out -ty "gene=fused" -v -sc 42000 -ti "PS1579 Haplotype A Gene Density" -sh 40
