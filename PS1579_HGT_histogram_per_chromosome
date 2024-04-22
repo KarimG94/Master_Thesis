@@ -1,0 +1,278 @@
+library(dplyr)
+library(tidyr)
+
+# HGT Candidates output of reubwn_hgt pipeline was used, first cut with -f 1,12 > alienspecies.tab
+# chr1
+# HapA
+HapA_chr1_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapA_chr1_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapA_chr1_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapA_chr1_HGT_species_count_table <- HapA_chr1_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+# View(HapA_chr1_HGT_species_count_table)
+
+# HapB
+HapB_chr1_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapB_chr1_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapB_chr1_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapB_chr1_HGT_species_count_table <- HapB_chr1_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapB_chr1_HGT_species_count_table)
+
+# HapC
+HapC_chr1_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapC_chr1_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapC_chr1_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapC_chr1_HGT_species_count_table <- HapC_chr1_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapC_chr1_HGT_species_count_table)
+
+# Plotting
+library(ggplot2)
+
+# Combining three tables into one
+
+HapA_chr1_HGT_species_count_table$Chromosome <- "HapA_chr1"
+HapB_chr1_HGT_species_count_table$Chromosome <- "HapB_chr1"
+HapC_chr1_HGT_species_count_table$Chromosome <- "HapC_chr1"
+
+combined_chr1 <- rbind(HapA_chr1_HGT_species_count_table, HapB_chr1_HGT_species_count_table, HapC_chr1_HGT_species_count_table)
+
+#getting Domain or Kingdom from HGT_Species
+combined_chr1$Domain <- sapply(strsplit(combined_chr1$HGT_Species, ";"), `[`, 1)
+combined_chr1$Kingdom <- sapply(strsplit(combined_chr1$HGT_Species, ";"), `[`, 2)
+
+# chr2
+# HapA
+HapA_chr2_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapA_chr2_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapA_chr2_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapA_chr2_HGT_species_count_table <- HapA_chr2_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapA_chr2_HGT_species_count_table)
+
+# HapB
+HapB_chr2_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapB_chr2_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapB_chr2_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapB_chr2_HGT_species_count_table <- HapB_chr2_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapB_chr2_HGT_species_count_table)
+
+# HapC
+HapC_chr2_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapC_chr2_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapC_chr2_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapC_chr2_HGT_species_count_table <- HapC_chr2_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapC_chr2_HGT_species_count_table)
+
+HapA_chr2_HGT_species_count_table$Chromosome <- "HapA_chr2"
+HapB_chr2_HGT_species_count_table$Chromosome <- "HapB_chr2"
+HapC_chr2_HGT_species_count_table$Chromosome <- "HapC_chr2"
+
+combined_chr2 <- rbind(HapA_chr2_HGT_species_count_table, HapB_chr2_HGT_species_count_table, HapC_chr2_HGT_species_count_table)
+
+combined_chr2$Domain <- sapply(strsplit(combined_chr2$HGT_Species, ";"), `[`, 1)
+combined_chr2$Kingdom <- sapply(strsplit(combined_chr2$HGT_Species, ";"), `[`, 2)
+
+# chr3
+# HapA
+HapA_chr3_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapA_chr3_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapA_chr3_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapA_chr3_HGT_species_count_table <- HapA_chr3_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapA_chr3_HGT_species_count_table)
+
+# HapB
+HapB_chr3_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapB_chr3_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapB_chr3_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapB_chr3_HGT_species_count_table <- HapB_chr3_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapB_chr3_HGT_species_count_table)
+
+# HapC
+HapC_chr3_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapC_chr3_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapC_chr3_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapC_chr3_HGT_species_count_table <- HapC_chr3_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapC_chr3_HGT_species_count_table)
+
+HapA_chr3_HGT_species_count_table$Chromosome <- "HapA_chr3"
+HapB_chr3_HGT_species_count_table$Chromosome <- "HapB_chr3"
+HapC_chr3_HGT_species_count_table$Chromosome <- "HapC_chr3"
+
+combined_chr3 <- rbind(HapA_chr3_HGT_species_count_table, HapB_chr3_HGT_species_count_table, HapC_chr3_HGT_species_count_table)
+
+combined_chr3$Domain <- sapply(strsplit(combined_chr3$HGT_Species, ";"), `[`, 1)
+combined_chr3$Kingdom <- sapply(strsplit(combined_chr3$HGT_Species, ";"), `[`, 2)
+
+# chr4
+# HapA
+HapA_chr4_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapA_chr4_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapA_chr4_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapA_chr4_HGT_species_count_table <- HapA_chr4_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapA_chr4_HGT_species_count_table)
+
+# HapB
+HapB_chr4_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapB_chr4_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapB_chr4_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapB_chr4_HGT_species_count_table <- HapB_chr4_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapB_chr4_HGT_species_count_table)
+
+# HapC
+HapC_chr4_nonem_reubwn_alienspecies <- read.delim("~/alienspecies_tables/PS1579_by_chromosome/HapC_chr4_nonem_reubwn_alienspecies.tab", header=FALSE, comment.char="#")
+colnames(HapC_chr4_nonem_reubwn_alienspecies) <- c("Gene ID", "HGT Species")
+
+HapC_chr4_HGT_species_count_table <- HapC_chr4_nonem_reubwn_alienspecies %>%
+  group_by(HGT_Species = `HGT Species`) %>%
+  summarize(Count = n(), 
+            Gene_IDs = paste(`Gene ID`, collapse = ";")) %>%
+  ungroup() %>%
+  select(Count, HGT_Species, Gene_IDs)
+
+#View(HapC_chr4_HGT_species_count_table)
+
+HapA_chr4_HGT_species_count_table$Chromosome <- "HapA_chr4"
+HapB_chr4_HGT_species_count_table$Chromosome <- "HapB_chr4"
+HapC_chr4_HGT_species_count_table$Chromosome <- "HapC_chr4"
+
+combined_chr4 <- rbind(HapA_chr4_HGT_species_count_table, HapB_chr4_HGT_species_count_table, HapC_chr4_HGT_species_count_table)
+
+combined_chr4$Domain <- sapply(strsplit(combined_chr4$HGT_Species, ";"), `[`, 1)
+combined_chr4$Kingdom <- sapply(strsplit(combined_chr4$HGT_Species, ";"), `[`, 2)
+
+# Summarizing counts by Chromosome and Domain
+combined_summary1 <- combined_chr1 %>%
+  group_by(Chromosome, Domain) %>%
+  summarize(Total_Count = sum(Count), .groups = 'drop')
+
+combined_summary1$Domain <- factor(combined_summary1$Domain, levels = c("Viruses", "Bacteria", "Eukaryota", "Archaea", "undef"))
+
+# Combining tables for chromosome 1
+combined_chr1 <- bind_rows(
+  HapA_chr1_HGT_species_count_table %>% mutate(Chromosome = "chr1", Haplotype = "HapA"),
+  HapB_chr1_HGT_species_count_table %>% mutate(Chromosome = "chr1", Haplotype = "HapB"),
+  HapC_chr1_HGT_species_count_table %>% mutate(Chromosome = "chr1", Haplotype = "HapC")
+)
+
+# Combining tables for chromosome 2
+combined_chr2 <- bind_rows(
+  HapA_chr2_HGT_species_count_table %>% mutate(Chromosome = "chr2", Haplotype = "HapA"),
+  HapB_chr2_HGT_species_count_table %>% mutate(Chromosome = "chr2", Haplotype = "HapB"),
+  HapC_chr2_HGT_species_count_table %>% mutate(Chromosome = "chr2", Haplotype = "HapC")
+)
+
+# Combining tables for chromosome 3
+combined_chr3 <- bind_rows(
+  HapA_chr3_HGT_species_count_table %>% mutate(Chromosome = "chr3", Haplotype = "HapA"),
+  HapB_chr3_HGT_species_count_table %>% mutate(Chromosome = "chr3", Haplotype = "HapB"),
+  HapC_chr3_HGT_species_count_table %>% mutate(Chromosome = "chr3", Haplotype = "HapC")
+)
+
+# Combining tables for chromosome 4
+combined_chr4 <- bind_rows(
+  HapA_chr4_HGT_species_count_table %>% mutate(Chromosome = "chr4", Haplotype = "HapA"),
+  HapB_chr4_HGT_species_count_table %>% mutate(Chromosome = "chr4", Haplotype = "HapB"),
+  HapC_chr4_HGT_species_count_table %>% mutate(Chromosome = "chr4", Haplotype = "HapC")
+)
+
+# Combining all into one data frame
+combined_all <- bind_rows(combined_chr1, combined_chr2, combined_chr3, combined_chr4)
+
+# Extracting Domains or Kingdoms for all
+combined_all$Domain <- sapply(strsplit(combined_all$HGT_Species, ";"), `[`, 1)
+combined_all$Kingdom <- sapply(strsplit(combined_all$HGT_Species, ";"), `[`, 2)
+
+# Order for the histogram stacks 
+combined_all$Domain <- factor(combined_all$Domain, levels = c("Viruses", "Bacteria", "Eukaryota", "Archaea", "undef"))
+
+# Summarizing data for the plot
+combined_summary <- combined_all %>%
+  group_by(Chromosome, Haplotype, Domain) %>%
+  summarize(Total_Count = sum(Count), .groups = 'drop')
+
+# Color mapping for domains
+color_mapping <- c("Archaea" = "#cc0000", "Eukaryota" = "#232ec2", "Viruses" = "yellow", "Bacteria" = "#d65510", "undef" = "#7b7b7b")
+
+# Plotting with grouping by Chromosome and Haplotype, and stacking by Domain
+
+ggplot(combined_summary, aes(x = Haplotype, y = Total_Count, fill = Domain)) +
+  geom_bar(stat = "identity", position = position_stack(), width = 0.7) + # Change width here
+  scale_fill_manual(values = color_mapping) +
+  geom_text(aes(label = Total_Count), position = position_stack(vjust = 0.5), size = 3.5, color = "black") + # Change count font
+  facet_wrap(~Chromosome, nrow = 1, scales = "free_x", strip.position = "bottom") +
+  theme_minimal() +
+  labs(title = "Count of HGT Candidates by Chromosome, Haplotype and Domain in PS1579",
+       x = "Chromosome and Haplotype",
+       y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(10, 20, 10, 20),
+        strip.background = element_blank(),
+        strip.placement = "outside",
+        panel.spacing = unit(0.5, "lines"),
+        panel.background = element_rect(fill = "#e8e8e8", colour = "#e8e8e8"), # Change background color
+        panel.grid.major = element_line(colour = "white"), # Change grid color
+        panel.grid.minor = element_line(colour = "white"))
