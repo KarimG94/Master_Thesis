@@ -2,7 +2,6 @@ mash_table1 <- read.delim("~/mash_table1.tsv")
 mash_table2 <- read.delim("~/mash_table2.tsv")
 mash_table3 <- read.delim("~/mash_table3.tsv")
 
-# Loading libraries
 library(ggplot2)
 library(reshape2)
 library(dplyr)
