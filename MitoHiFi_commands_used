@@ -30,3 +30,5 @@ docker run -u $(id -u) -v $(pwd):$PWD ghcr.io/marcelauliano/mitohifi:master mito
 
 # Mitohifi run for Turbatrix aceti, fownloaded first from NCBI using SRA toolkit fasterq-dump
 docker run -u $(id -u) -v $(pwd):$PWD ghcr.io/marcelauliano/mitohifi:master mitohifi.py -d -r /home/kgueddac/Data/mitohifi/T_aceti/ERR11647573.fastq -t 20 -o 5 -f /home/kgueddac/Data/mitohifi/T_aceti_reference/AP017464.1.fasta -g /home/kgueddac/Data/mitohifi/T_aceti_reference/AP017464.1.gb --mitos
+
+# for output recovery, search job ID with docker ps -a | head, then copy tmp folder using docker cp "ID":/tmp results_directory.
