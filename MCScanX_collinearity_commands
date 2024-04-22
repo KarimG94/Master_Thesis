@@ -10,7 +10,7 @@ for name in ES5 JU765 LC92 Pdet PS1579.HapA PS1579.HapB PS1579.HapC psuperbus; d
 # use blast like this
 blastp -query PS1579.HapC.braker.unigene.corrected.fasta -db ES5.braker.chromosomes.fasta -evalue 1e-10 -outfmt 6 -num_threads 20 -out PS1579HapC_to_ES5.blast
 
-# cat all .blast file together to xyz.blast and all .gff3 files together to xyz.gff, put in one folder, then use MCScanX:
+# cat all .blast files to xyz.blast and all .gff3 files together to xyz.gff, put in one folder, then use MCScanX:
 /home/kgueddac/Software/MCScanX/MCScanX xyz/xyz -k 250 -e 1e-20
 
 # put xyz.collinearity file, gff file and color_file (colors from nigon element file) into Synvisio
