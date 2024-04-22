@@ -144,7 +144,7 @@ combined_summary$species <- factor(combined_summary$species, levels = c("P. detr
 # domain order for the plot
 combined_summary$Domain <- factor(combined_summary$Domain, levels = c( "Viruses", "Bacteria", "Eukaryota",  "Archaea", "undef"))
 
-# Choosing color
+# Color
 color_mapping <- c("Archaea" = "#cc0000", "Eukaryota" = "#232ec2", "Viruses" = "yellow", "Bacteria" = "#d65510", "undef" = "#7b7b7b")
 
 # Generating histogram
